@@ -1,0 +1,1 @@
+AstroDex — personnes actuellement dans l'espace. Site GitHub Pages. Open Notify est HTTP uniquement, donc cette version utilise des proxys HTTPS avec fallback pour éviter le blocage mixed-content du navigateur.
