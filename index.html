@@ -1,0 +1,62 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AstroDex — Personnes dans l'espace</title>
+<style>
+:root{--bg:#07110f;--panel:#0d1b18;--line:#244139;--text:#f4fff9;--muted:#9db9ae;--lime:#b8f34a;--aqua:#38e8d0;--pink:#ff77a8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#173b33,transparent 30%),radial-gradient(circle at 95% 8%,#401b34,transparent 27%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}.wrap{width:min(1080px,calc(100% - 34px));margin:auto}nav{height:90px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:13px;align-items:center}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,var(--lime),var(--aqua),var(--pink));color:#07110f}.brand b{font-size:23px}.brand small{display:block;color:var(--muted)}.nav{display:flex;gap:10px}.nav a{color:inherit;text-decoration:none;padding:10px 14px;border-radius:12px}.nav a:first-child{background:#14251f}.hero{padding:58px 48px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(120deg,#10241fee,#171225ee);position:relative;overflow:hidden}.hero:after{content:"👨‍🚀";position:absolute;right:55px;top:25px;font-size:165px;opacity:.1}.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:900;color:var(--lime)}h1{font-size:clamp(42px,6vw,72px);line-height:.98;letter-spacing:-.05em;margin:16px 0 20px;max-width:760px}.grad{background:linear-gradient(90deg,var(--lime),var(--aqua),var(--pink));background-clip:text;color:transparent}.hero p{max-width:700px;color:#c0d1ca;line-height:1.65;font-size:17px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 34px}.stat{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:20px}.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;font-size:30px;margin-top:7px}.head{display:flex;justify-content:space-between;align-items:end;margin:0 0 15px}.head h2{font-size:30px;margin:5px 0}.status{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:linear-gradient(180deg,#10221d,#0a1512);border-radius:22px;padding:24px;min-height:185px;position:relative;overflow:hidden}.card:after{content:"✦";position:absolute;right:18px;top:12px;font-size:54px;color:#ffffff0b}.avatar{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#213d34,#142b25);border:1px solid #365b50}.card h3{font-size:20px;margin:18px 0 7px}.craft{display:inline-block;color:#07110f;background:var(--lime);font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px}.empty{grid-column:1/-1;text-align:center;padding:48px;border:1px dashed var(--line);border-radius:20px;color:var(--muted)}button{border:0;border-radius:14px;padding:12px 18px;font-weight:900;background:linear-gradient(135deg,var(--lime),var(--aqua));color:#06110d;cursor:pointer}footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 45px;color:var(--muted);font-size:13px}
+@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.summary{grid-template-columns:1fr}.hero{padding:38px 24px}.hero:after{display:none}}@media(max-width:520px){.grid{grid-template-columns:1fr}.nav{display:none}}
+</style></head><body><div class="wrap"><nav><div class="brand"><div class="logo">👨‍🚀</div><div><b>AstroDex</b><small>Personnes actuellement dans l'espace</small></div></div><div class="nav"><a href="#">Accueil</a><a href="#crew">Équipages</a><a href="#about">À propos</a></div></nav>
+<section class="hero"><div class="eyebrow">Live space crew</div><h1>Qui est <span class="grad">dans l'espace</span> maintenant ?</h1><p>Découvre les astronautes actuellement en orbite et le vaisseau à bord duquel ils se trouvent.</p></section>
+<section class="summary"><div class="stat"><span>Personnes dans l'espace</span><strong id="total">—</strong></div><div class="stat"><span>Vaisseaux / stations</span><strong id="crafts">—</strong></div><div class="stat"><span>Source</span><strong style="font-size:20px">FreeOpenAPI</strong></div></section>
+<div class="head" id="crew"><div><div class="eyebrow">Équipages</div><h2>Personnes en orbite</h2><div class="status" id="status">Chargement…</div></div><button id="refresh">Actualiser</button></div><main class="grid" id="grid"></main>
+<footer id="about">AstroDex • FreeOpenAPI • HTTPS direct • Version 4</footer></div>
+<script>
+const grid=document.querySelector("#grid"),statusEl=document.querySelector("#status");
+const API="https://freeopenapi.dev/api/v1/space/people-in-space";
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+
+function normalize(d){
+  const raw=Array.isArray(d)?d:(d.people||d.data?.people||d.astronauts||d.data||[]);
+  return raw.map(x=>({
+    name:x.name||x.person||x.astronaut||"Astronaute",
+    craft:x.craft||x.spacecraft||x.station||x.location||"En orbite"
+  })).filter(x=>x.name);
+}
+
+function render(people){
+  const crafts=[...new Set(people.map(x=>x.craft).filter(Boolean))];
+  document.querySelector("#total").textContent=people.length;
+  document.querySelector("#crafts").textContent=crafts.length;
+  grid.innerHTML=people.length
+    ? people.map(p=>`<article class="card"><div class="avatar">👨‍🚀</div><h3>${esc(p.name)}</h3><span class="craft">${esc(p.craft)}</span></article>`).join("")
+    : '<div class="empty">Aucune donnée reçue.</div>';
+}
+
+async function load(){
+  statusEl.textContent="Connexion rapide…";
+  try{
+    const ctl=new AbortController();
+    const timer=setTimeout(()=>ctl.abort(),6000);
+    const r=await fetch(API,{
+      cache:"no-store",
+      signal:ctl.signal,
+      headers:{Accept:"application/json"}
+    });
+    clearTimeout(timer);
+    if(!r.ok)throw new Error("HTTP "+r.status);
+
+    const data=await r.json();
+    const people=normalize(data);
+    if(!people.length)throw new Error("Réponse vide");
+
+    render(people);
+    statusEl.textContent="Données chargées à "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  }catch(e){
+    document.querySelector("#total").textContent="—";
+    document.querySelector("#crafts").textContent="—";
+    grid.innerHTML='<div class="empty">La source ne répond pas actuellement. Clique sur Actualiser pour réessayer.</div>';
+    statusEl.textContent="Connexion impossible";
+  }
+}
+
+document.querySelector("#refresh").onclick=load;
+load();
+</script></body></html>
