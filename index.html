@@ -1,64 +1,44 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AstroDex — Personnes dans l'espace</title>
 <style>
 :root{--bg:#07110f;--panel:#0d1b18;--line:#244139;--text:#f4fff9;--muted:#9db9ae;--lime:#b8f34a;--aqua:#38e8d0;--pink:#ff77a8}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#173b33,transparent 30%),radial-gradient(circle at 95% 8%,#401b34,transparent 27%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}.wrap{width:min(1080px,calc(100% - 34px));margin:auto}nav{height:90px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:13px;align-items:center}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,var(--lime),var(--aqua),var(--pink));color:#07110f}.brand b{font-size:23px}.brand small{display:block;color:var(--muted)}.nav{display:flex;gap:10px}.nav a{color:inherit;text-decoration:none;padding:10px 14px;border-radius:12px}.nav a:first-child{background:#14251f}.hero{padding:58px 48px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(120deg,#10241fee,#171225ee);position:relative;overflow:hidden}.hero:after{content:"👨‍🚀";position:absolute;right:55px;top:25px;font-size:165px;opacity:.1}.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:900;color:var(--lime)}h1{font-size:clamp(42px,6vw,72px);line-height:.98;letter-spacing:-.05em;margin:16px 0 20px;max-width:760px}.grad{background:linear-gradient(90deg,var(--lime),var(--aqua),var(--pink));background-clip:text;color:transparent}.hero p{max-width:700px;color:#c0d1ca;line-height:1.65;font-size:17px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 34px}.stat{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:20px}.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;font-size:30px;margin-top:7px}.head{display:flex;justify-content:space-between;align-items:end;margin:0 0 15px}.head h2{font-size:30px;margin:5px 0}.status{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:linear-gradient(180deg,#10221d,#0a1512);border-radius:22px;padding:24px;min-height:185px;position:relative;overflow:hidden}.card:after{content:"✦";position:absolute;right:18px;top:12px;font-size:54px;color:#ffffff0b}.avatar{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#213d34,#142b25);border:1px solid #365b50}.card h3{font-size:20px;margin:18px 0 7px}.craft{display:inline-block;color:#07110f;background:var(--lime);font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px}.empty{grid-column:1/-1;text-align:center;padding:48px;border:1px dashed var(--line);border-radius:20px;color:var(--muted)}button{border:0;border-radius:14px;padding:12px 18px;font-weight:900;background:linear-gradient(135deg,var(--lime),var(--aqua));color:#06110d;cursor:pointer}footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 45px;color:var(--muted);font-size:13px}
-.ad-zone{width:100%;display:flex;justify-content:center;align-items:center;margin:30px auto;overflow:hidden}
-.ad-desktop{display:block;max-width:728px}
-.ad-mobile{display:none;max-width:320px}
-.ad-square{min-height:250px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#173b33,transparent 30%),radial-gradient(circle at 95% 8%,#401b34,transparent 27%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}.wrap{width:min(1080px,calc(100% - 34px));margin:auto}nav{height:90px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:13px;align-items:center}.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,var(--lime),var(--aqua),var(--pink));color:#07110f}.brand b{font-size:23px}.brand small{display:block;color:var(--muted)}.nav{display:flex;gap:10px}.nav a{color:inherit;text-decoration:none;padding:10px 14px;border-radius:12px}.nav a:first-child{background:#14251f}.hero{padding:58px 48px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(120deg,#10241fee,#171225ee);position:relative;overflow:hidden}.hero:after{content:"👨‍🚀";position:absolute;right:55px;top:25px;font-size:165px;opacity:.1}.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:900;color:var(--lime)}h1{font-size:clamp(42px,6vw,72px);line-height:.98;letter-spacing:-.05em;margin:16px 0 20px;max-width:760px}.grad{background:linear-gradient(90deg,var(--lime),var(--aqua),var(--pink));background-clip:text;color:transparent}.hero p{max-width:700px;color:#c0d1ca;line-height:1.65;font-size:17px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 34px}.stat{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:20px}.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;font-size:30px;margin-top:7px}.head{display:flex;justify-content:space-between;align-items:end;margin:0 0 15px}.head h2{font-size:30px;margin:5px 0}.status{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:linear-gradient(180deg,#10221d,#0a1512);border-radius:22px;overflow:hidden;min-height:330px;position:relative}.card:after{content:"✦";position:absolute;right:18px;top:12px;font-size:54px;color:#ffffff0b}.photoWrap{height:220px;background:#08110f;overflow:hidden;position:relative}.photo{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}.photoFallback{width:100%;height:100%;display:grid;place-items:center;font-size:72px;background:linear-gradient(145deg,#213d34,#142b25)}.cardBody{padding:18px 20px 22px}.card h3{font-size:20px;margin:0 0 8px}.craft{display:inline-block;color:#07110f;background:var(--lime);font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px}.photoSource{margin-top:10px;color:var(--muted);font-size:10px}.empty{grid-column:1/-1;text-align:center;padding:48px;border:1px dashed var(--line);border-radius:20px;color:var(--muted)}button{border:0;border-radius:14px;padding:12px 18px;font-weight:900;background:linear-gradient(135deg,var(--lime),var(--aqua));color:#06110d;cursor:pointer}footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 45px;color:var(--muted);font-size:13px}
+.ad-zone{width:100%;display:flex;justify-content:center;align-items:center;margin:30px auto;overflow:hidden}.ad-desktop{display:block;max-width:728px}.ad-mobile{display:none;max-width:320px}.ad-square{min-height:250px}
 @media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.summary{grid-template-columns:1fr}.hero{padding:38px 24px}.hero:after{display:none}.ad-desktop{display:none}.ad-mobile{display:block}}@media(max-width:520px){.grid{grid-template-columns:1fr}.nav{display:none}}
 </style></head><body><div class="wrap"><nav><div class="brand"><div class="logo">👨‍🚀</div><div><b>AstroDex</b><small>Personnes actuellement dans l'espace</small></div></div><div class="nav"><a href="#">Accueil</a><a href="#crew">Équipages</a><a href="#about">À propos</a></div></nav>
-<section class="hero"><div class="eyebrow">Live space crew</div><h1>Qui est <span class="grad">dans l'espace</span> maintenant ?</h1><p>Découvre les astronautes actuellement en orbite et le vaisseau à bord duquel ils se trouvent.</p></section>
+<section class="hero"><div class="eyebrow">Live space crew</div><h1>Qui est <span class="grad">dans l'espace</span> maintenant ?</h1><p>Découvre les astronautes actuellement en orbite, leur vaisseau et leur photo. AstroDex combine plusieurs sources publiques pour maximiser le nombre de portraits affichés.</p></section>
 
-<section class="ad-zone" aria-label="Publicité">
-  <div class="ad-desktop">
-    <script>
-      atOptions={'key':'c2adb462347c0d37dad8f389a7368877','format':'iframe','height':90,'width':728,'params':{}};
-    </script>
-    <script src="https://www.highrevenueformat.com/c2adb462347c0d37dad8f389a7368877/invoke.js"></script>
-  </div>
-  <div class="ad-mobile">
-    <script>
-      atOptions={'key':'c91a5a4cd7242c48af77d7088c65bb20','format':'iframe','height':50,'width':320,'params':{}};
-    </script>
-    <script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
-  </div>
-</section>
+<section class="ad-zone" aria-label="Publicité"><div class="ad-desktop">
+<script>atOptions={'key':'c2adb462347c0d37dad8f389a7368877','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/c2adb462347c0d37dad8f389a7368877/invoke.js"></script>
+</div><div class="ad-mobile">
+<script>atOptions={'key':'c91a5a4cd7242c48af77d7088c65bb20','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
+</div></section>
 
-<section class="summary"><div class="stat"><span>Personnes dans l'espace</span><strong id="total">—</strong></div><div class="stat"><span>Vaisseaux / stations</span><strong id="crafts">—</strong></div><div class="stat"><span>Source</span><strong style="font-size:20px">ISS Crew API</strong></div></section>
+<section class="summary"><div class="stat"><span>Personnes dans l'espace</span><strong id="total">—</strong></div><div class="stat"><span>Vaisseaux / stations</span><strong id="crafts">—</strong></div><div class="stat"><span>Photos</span><strong style="font-size:20px">Wikipedia + Commons + NASA</strong></div></section>
 
 <section class="ad-zone ad-square" aria-label="Publicité">
-  <script>
-    atOptions={'key':'7bc582f3d19301e5ff8f3ecf79156fdd','format':'iframe','height':250,'width':300,'params':{}};
-  </script>
-  <script src="https://www.highrevenueformat.com/7bc582f3d19301e5ff8f3ecf79156fdd/invoke.js"></script>
+<script>atOptions={'key':'7bc582f3d19301e5ff8f3ecf79156fdd','format':'iframe','height':250,'width':300,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/7bc582f3d19301e5ff8f3ecf79156fdd/invoke.js"></script>
 </section>
 
 <div class="head" id="crew"><div><div class="eyebrow">Équipages</div><h2>Personnes en orbite</h2><div class="status" id="status">Chargement…</div></div><button id="refresh">Actualiser</button></div><main class="grid" id="grid"></main>
 
 <section class="ad-zone ad-square" aria-label="Publicité">
-  <script>
-    atOptions={'key':'7bc582f3d19301e5ff8f3ecf79156fdd','format':'iframe','height':250,'width':300,'params':{}};
-  </script>
-  <script src="https://www.highrevenueformat.com/7bc582f3d19301e5ff8f3ecf79156fdd/invoke.js"></script>
+<script>atOptions={'key':'7bc582f3d19301e5ff8f3ecf79156fdd','format':'iframe','height':250,'width':300,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/7bc582f3d19301e5ff8f3ecf79156fdd/invoke.js"></script>
 </section>
 
-<section class="ad-zone" aria-label="Publicité">
-  <div class="ad-desktop">
-    <script>
-      atOptions={'key':'c2adb462347c0d37dad8f389a7368877','format':'iframe','height':90,'width':728,'params':{}};
-    </script>
-    <script src="https://www.highrevenueformat.com/c2adb462347c0d37dad8f389a7368877/invoke.js"></script>
-  </div>
-  <div class="ad-mobile">
-    <script>
-      atOptions={'key':'c91a5a4cd7242c48af77d7088c65bb20','format':'iframe','height':50,'width':320,'params':{}};
-    </script>
-    <script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
-  </div>
-</section>
+<section class="ad-zone" aria-label="Publicité"><div class="ad-desktop">
+<script>atOptions={'key':'c2adb462347c0d37dad8f389a7368877','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/c2adb462347c0d37dad8f389a7368877/invoke.js"></script>
+</div><div class="ad-mobile">
+<script>atOptions={'key':'c91a5a4cd7242c48af77d7088c65bb20','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
+</div></section>
 
-<footer id="about">AstroDex • Source HTTPS directe • Version 6</footer></div>
+<footer id="about">AstroDex • Équipage : source publique ISS • portraits : Wikipedia, Wikimedia Commons et NASA Images.</footer></div>
+
 <script>
 const grid=document.querySelector("#grid"),statusEl=document.querySelector("#status");
 const SNAPSHOT={people:[
@@ -70,19 +50,107 @@ const SNAPSHOT={people:[
 ]};
 const LIVE="https://cdn.jsdelivr.net/gh/corquaid/international-space-station-APIs@main/JSON/people-in-space.json";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const PHOTO_CACHE=new Map();
+
 function norm(d){return (d.people||[]).map(x=>({name:x.name||"Astronaute",craft:x.spacecraft||x.craft||"En orbite"}))}
-function render(a){const cs=[...new Set(a.map(x=>x.craft))];document.querySelector("#total").textContent=a.length;document.querySelector("#crafts").textContent=cs.length;grid.innerHTML=a.map(p=>`<article class="card"><div class="avatar">👨‍🚀</div><h3>${esc(p.name)}</h3><span class="craft">${esc(p.craft)}</span></article>`).join("")}
-async function refresh(){
- statusEl.textContent="Données affichées instantanément";
+async function getJSON(url,ms=9000){
+ const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms);
  try{
-   const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),1800);
-   const r=await fetch(LIVE,{cache:"no-store",signal:ctl.signal});
-   clearTimeout(t);
-   if(r.ok){const d=await r.json(),a=norm(d);if(a.length){render(a);statusEl.textContent="Données actualisées";return}}
- }catch(e){}
- statusEl.textContent="Données disponibles • mode rapide";
+   const r=await fetch(url,{cache:"no-store",signal:ctl.signal});
+   if(!r.ok)throw new Error("HTTP "+r.status);
+   return await r.json();
+ }finally{clearTimeout(t)}
 }
-render(norm(SNAPSHOT));
+function normName(s){
+ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
+}
+function surname(name){
+ const p=normName(name).split(" ").filter(Boolean);return p[p.length-1]||"";
+}
+async function wikipediaPhoto(name,lang="en"){
+ const key=`wiki:${lang}:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
+ try{
+   const q=`"${name}" astronaut`;
+   const url=`https://${lang}.wikipedia.org/w/api.php?origin=*&action=query&format=json&generator=search&gsrnamespace=0&gsrlimit=6&gsrsearch=${encodeURIComponent(q)}&prop=pageimages&pithumbsize=800&piprop=thumbnail%7Coriginal`;
+   const d=await getJSON(url), pages=Object.values(d.query?.pages||{});
+   const n=normName(name), sn=surname(name);
+   const candidates=pages.filter(p=>p.thumbnail?.source||p.original?.source).map(p=>{
+      const t=normName(p.title);
+      return {p,score:(t===n?100:0)+(sn&&t.includes(sn)?35:0)+(t.includes("astronaut")?10:0)};
+   }).sort((a,b)=>b.score-a.score);
+   const p=candidates[0]?.p, photo=p?.thumbnail?.source||p?.original?.source||"";
+   PHOTO_CACHE.set(key,photo);return photo;
+ }catch(e){PHOTO_CACHE.set(key,"");return ""}
+}
+async function commonsPhoto(name){
+ const key=`commons:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
+ try{
+   const url=`https://commons.wikimedia.org/w/api.php?origin=*&action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch=${encodeURIComponent(name+" astronaut")}&prop=imageinfo&iiprop=url&iiurlwidth=800`;
+   const d=await getJSON(url), pages=Object.values(d.query?.pages||{}),sn=surname(name);
+   const p=pages.find(x=>normName(x.title).includes(sn))||pages[0];
+   const photo=p?.imageinfo?.[0]?.thumburl||p?.imageinfo?.[0]?.url||"";
+   PHOTO_CACHE.set(key,photo);return photo;
+ }catch(e){PHOTO_CACHE.set(key,"");return ""}
+}
+async function nasaPhoto(name){
+ const key=`nasa:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
+ try{
+   const d=await getJSON(`https://images-api.nasa.gov/search?q=${encodeURIComponent(name)}&media_type=image&page_size=12`);
+   const its=d.collection?.items||[];
+   const n=normName(name),sn=surname(name);
+   const scored=its.map(i=>{
+     const meta=i.data?.[0]||{},txt=normName((meta.title||"")+" "+(meta.description||""));
+     const link=(i.links||[]).find(x=>x.render==="image")?.href||i.links?.[0]?.href||"";
+     return {link,score:(txt.includes(n)?100:0)+(sn&&txt.includes(sn)?30:0)};
+   }).filter(x=>x.link).sort((a,b)=>b.score-a.score);
+   const photo=scored[0]?.link||"";
+   PHOTO_CACHE.set(key,photo);return photo;
+ }catch(e){PHOTO_CACHE.set(key,"");return ""}
+}
+async function findPhoto(name){
+ let p=await wikipediaPhoto(name,"en"); if(p)return {url:p,source:"Wikipedia"};
+ p=await wikipediaPhoto(name,"fr"); if(p)return {url:p,source:"Wikipedia FR"};
+ p=await commonsPhoto(name); if(p)return {url:p,source:"Wikimedia Commons"};
+ p=await nasaPhoto(name); if(p)return {url:p,source:"NASA Images"};
+ return {url:"",source:"Photo indisponible"};
+}
+function cardHtml(p,i){
+ return `<article class="card" data-i="${i}">
+   <div class="photoWrap" id="photo-${i}"><div class="photoFallback">👨‍🚀</div></div>
+   <div class="cardBody"><h3>${esc(p.name)}</h3><span class="craft">${esc(p.craft)}</span><div class="photoSource" id="source-${i}">Recherche de la photo…</div></div>
+ </article>`;
+}
+function render(a){
+ const cs=[...new Set(a.map(x=>x.craft))];
+ document.querySelector("#total").textContent=a.length;
+ document.querySelector("#crafts").textContent=cs.length;
+ grid.innerHTML=a.length?a.map(cardHtml).join(""):'<div class="empty">Aucun astronaute trouvé.</div>';
+ loadPhotos(a);
+}
+async function loadPhotos(a){
+ let ok=0;
+ const jobs=a.map(async(p,i)=>{
+   const ph=await findPhoto(p.name);
+   const wrap=document.querySelector(`#photo-${i}`),src=document.querySelector(`#source-${i}`);
+   if(!wrap||!src)return;
+   if(ph.url){
+     wrap.innerHTML=`<img class="photo" src="${esc(ph.url)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML='<div class=&quot;photoFallback&quot;>👨‍🚀</div>'">`;
+     src.textContent=`Photo : ${ph.source}`;ok++;
+   }else src.textContent="Photo : indisponible";
+ });
+ await Promise.allSettled(jobs);
+ statusEl.textContent+=` · ${ok}/${a.length} photos trouvées`;
+}
+async function refresh(){
+ statusEl.textContent="Actualisation des équipages…";
+ try{
+   const d=await getJSON(LIVE,3500),a=norm(d);
+   if(a.length){render(a);statusEl.textContent="Données actualisées";return}
+ }catch(e){}
+ render(norm(SNAPSHOT));
+ statusEl.textContent="Données disponibles • mode de secours";
+}
 document.querySelector("#refresh").onclick=refresh;
+render(norm(SNAPSHOT));
 refresh();
 </script></body></html>
