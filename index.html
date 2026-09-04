@@ -1,3 +1,4 @@
+
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AstroDex — Personnes dans l'espace</title>
 <style>
 :root{--bg:#07110f;--panel:#0d1b18;--line:#244139;--text:#f4fff9;--muted:#9db9ae;--lime:#b8f34a;--aqua:#38e8d0;--pink:#ff77a8}
@@ -15,7 +16,7 @@
 <script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
 </div></section>
 
-<section class="summary"><div class="stat"><span>Personnes dans l'espace</span><strong id="total">—</strong></div><div class="stat"><span>Vaisseaux / stations</span><strong id="crafts">—</strong></div><div class="stat"><span>Photos</span><strong style="font-size:20px">Wikipedia + Commons + NASA</strong></div></section>
+<section class="summary"><div class="stat"><span>Personnes dans l'espace</span><strong id="total">—</strong></div><div class="stat"><span>Vaisseaux / stations</span><strong id="crafts">—</strong></div><div class="stat"><span>Photos</span><strong style="font-size:20px">portraits intégrés directement dans les cartes</strong></div></section>
 
 <section class="ad-zone ad-square" aria-label="Publicité">
 <script>atOptions={'key':'7bc582f3d19301e5ff8f3ecf79156fdd','format':'iframe','height':250,'width':300,'params':{}};</script>
@@ -37,7 +38,7 @@
 <script src="https://www.highrevenueformat.com/c91a5a4cd7242c48af77d7088c65bb20/invoke.js"></script>
 </div></section>
 
-<footer id="about">AstroDex • Équipage : source publique ISS • portraits : Wikipedia, Wikimedia Commons et NASA Images.</footer></div>
+<footer id="about">AstroDex • Équipage : source publique ISS • portraits intégrés directement dans les cartes : aucun chargement photo via JavaScript.</footer></div>
 
 <script>
 const grid=document.querySelector("#grid"),statusEl=document.querySelector("#status");
@@ -49,75 +50,44 @@ const SNAPSHOT={people:[
 {name:"Zhang Zhiyuan",craft:"Tiangong"},{name:"Lai Ka-ying",craft:"Tiangong"}
 ]};
 const LIVE="https://cdn.jsdelivr.net/gh/corquaid/international-space-station-APIs@main/JSON/people-in-space.json";
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const PHOTO_CACHE=new Map();
-
-function norm(d){return (d.people||[]).map(x=>({name:x.name||"Astronaute",craft:x.spacecraft||x.craft||"En orbite"}))}
-async function getJSON(url,ms=9000){
- const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms);
+function norm(d){
+ const arr=Array.isArray(d)?d:(d?.people||d?.data||d?.humans||[]);
+ return (Array.isArray(arr)?arr:[]).map(x=>({
+   name:String(x.name||x.person||x.astronaut||"").trim(),
+   craft:String(x.craft||x.spacecraft||x.vehicle||x.station||"ISS").trim()
+ })).filter(x=>x.name);
+}
+async function getJSON(url,ms=3500){
+ const c=new AbortController();
+ const t=setTimeout(()=>c.abort(),ms);
  try{
-   const r=await fetch(url,{cache:"no-store",signal:ctl.signal});
+   const r=await fetch(url,{signal:c.signal,cache:"no-store"});
    if(!r.ok)throw new Error("HTTP "+r.status);
    return await r.json();
  }finally{clearTimeout(t)}
 }
-function normName(s){
- return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
-}
-function surname(name){
- const p=normName(name).split(" ").filter(Boolean);return p[p.length-1]||"";
-}
-async function wikipediaPhoto(name,lang="en"){
- const key=`wiki:${lang}:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
- try{
-   const q=`"${name}" astronaut`;
-   const url=`https://${lang}.wikipedia.org/w/api.php?origin=*&action=query&format=json&generator=search&gsrnamespace=0&gsrlimit=6&gsrsearch=${encodeURIComponent(q)}&prop=pageimages&pithumbsize=800&piprop=thumbnail%7Coriginal`;
-   const d=await getJSON(url), pages=Object.values(d.query?.pages||{});
-   const n=normName(name), sn=surname(name);
-   const candidates=pages.filter(p=>p.thumbnail?.source||p.original?.source).map(p=>{
-      const t=normName(p.title);
-      return {p,score:(t===n?100:0)+(sn&&t.includes(sn)?35:0)+(t.includes("astronaut")?10:0)};
-   }).sort((a,b)=>b.score-a.score);
-   const p=candidates[0]?.p, photo=p?.thumbnail?.source||p?.original?.source||"";
-   PHOTO_CACHE.set(key,photo);return photo;
- }catch(e){PHOTO_CACHE.set(key,"");return ""}
-}
-async function commonsPhoto(name){
- const key=`commons:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
- try{
-   const url=`https://commons.wikimedia.org/w/api.php?origin=*&action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch=${encodeURIComponent(name+" astronaut")}&prop=imageinfo&iiprop=url&iiurlwidth=800`;
-   const d=await getJSON(url), pages=Object.values(d.query?.pages||{}),sn=surname(name);
-   const p=pages.find(x=>normName(x.title).includes(sn))||pages[0];
-   const photo=p?.imageinfo?.[0]?.thumburl||p?.imageinfo?.[0]?.url||"";
-   PHOTO_CACHE.set(key,photo);return photo;
- }catch(e){PHOTO_CACHE.set(key,"");return ""}
-}
-async function nasaPhoto(name){
- const key=`nasa:${name}`;if(PHOTO_CACHE.has(key))return PHOTO_CACHE.get(key);
- try{
-   const d=await getJSON(`https://images-api.nasa.gov/search?q=${encodeURIComponent(name)}&media_type=image&page_size=12`);
-   const its=d.collection?.items||[];
-   const n=normName(name),sn=surname(name);
-   const scored=its.map(i=>{
-     const meta=i.data?.[0]||{},txt=normName((meta.title||"")+" "+(meta.description||""));
-     const link=(i.links||[]).find(x=>x.render==="image")?.href||i.links?.[0]?.href||"";
-     return {link,score:(txt.includes(n)?100:0)+(sn&&txt.includes(sn)?30:0)};
-   }).filter(x=>x.link).sort((a,b)=>b.score-a.score);
-   const photo=scored[0]?.link||"";
-   PHOTO_CACHE.set(key,photo);return photo;
- }catch(e){PHOTO_CACHE.set(key,"");return ""}
-}
-async function findPhoto(name){
- let p=await wikipediaPhoto(name,"en"); if(p)return {url:p,source:"Wikipedia"};
- p=await wikipediaPhoto(name,"fr"); if(p)return {url:p,source:"Wikipedia FR"};
- p=await commonsPhoto(name); if(p)return {url:p,source:"Wikimedia Commons"};
- p=await nasaPhoto(name); if(p)return {url:p,source:"NASA Images"};
- return {url:"",source:"Photo indisponible"};
-}
+
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const PHOTOS={
+ "Jessica Meir":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Jessica_Meir_official_portrait_in_an_EMU_%28B%26W%29.jpg/500px-Jessica_Meir_official_portrait_in_an_EMU_%28B%26W%29.jpg",
+ "Jack Hathaway":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Official_portrait_of_NASA_astronaut_Jack_Hathaway_(jsc2025e068207_alt).jpg?width=500",
+ "Sophie Adenot":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Iss075e0000126_(July_28,_2026)_---_ESA_(European_Space_Agency)_astronaut_and_Expedition_74_flight_engineer_Sophie_Adenot_is_pictured_inside_the_Quest_airlock_preparing_to_try_on_a_spacesuit_to_verify_its_comfort,_mobi.jpg?width=500",
+ "Andrey Fedyaev":"https://commons.wikimedia.org/wiki/Special:Redirect/file/SpaceX_crew_6_image_5.png?width=500",
+ "Pyotr Dubrov":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Pyotr_Dubrov_in_2021.jpg?width=500",
+ "Anna Kikina":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Anna_Kikina_Official_Portrait.jpg/500px-Anna_Kikina_Official_Portrait.jpg",
+ "Anil Menon":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/NASA_Astronaut_Anil_Menon_%28jsc2024e013690_alt%29.jpg/500px-NASA_Astronaut_Anil_Menon_%28jsc2024e013690_alt%29.jpg",
+ "Zhu Yangzhu":"https://commons.wikimedia.org/wiki/Special:Redirect/file/ZhuYangzhu.jpg?width=500",
+ "Zhang Zhiyuan":"https://www.stdaily.com/web/gdxw/pic/2026-05/23/521143_40774d13-48a4-4530-95a0-25e8fddd53ca.jpg",
+ "Lai Ka-ying":"https://substackcdn.com/image/fetch/%24s_%21aiXt%21%2Cf_auto%2Cq_auto%3Agood%2Cfl_progressive%3Asteep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fda2ca8f4-7992-40f7-b47d-f2f9f4534bbe_2480x3058.jpeg"
+};
 function cardHtml(p,i){
+ const photo=PHOTOS[p.name]||"";
+ const media=photo
+   ? `<img class="photo" src="${photo}" alt="${esc(p.name)}" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='grid';"><div class="photoFallback" style="display:none">👨‍🚀</div>`
+   : `<div class="photoFallback">👨‍🚀</div>`;
  return `<article class="card" data-i="${i}">
-   <div class="photoWrap" id="photo-${i}"><div class="photoFallback">👨‍🚀</div></div>
-   <div class="cardBody"><h3>${esc(p.name)}</h3><span class="craft">${esc(p.craft)}</span><div class="photoSource" id="source-${i}">Recherche de la photo…</div></div>
+   <div class="photoWrap">${media}</div>
+   <div class="cardBody"><h3>${esc(p.name)}</h3><span class="craft">${esc(p.craft)}</span></div>
  </article>`;
 }
 function render(a){
@@ -125,24 +95,9 @@ function render(a){
  document.querySelector("#total").textContent=a.length;
  document.querySelector("#crafts").textContent=cs.length;
  grid.innerHTML=a.length?a.map(cardHtml).join(""):'<div class="empty">Aucun astronaute trouvé.</div>';
- loadPhotos(a);
-}
-async function loadPhotos(a){
- let ok=0;
- const jobs=a.map(async(p,i)=>{
-   const ph=await findPhoto(p.name);
-   const wrap=document.querySelector(`#photo-${i}`),src=document.querySelector(`#source-${i}`);
-   if(!wrap||!src)return;
-   if(ph.url){
-     wrap.innerHTML=`<img class="photo" src="${esc(ph.url)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML='<div class=&quot;photoFallback&quot;>👨‍🚀</div>'">`;
-     src.textContent=`Photo : ${ph.source}`;ok++;
-   }else src.textContent="Photo : indisponible";
- });
- await Promise.allSettled(jobs);
- statusEl.textContent+=` · ${ok}/${a.length} photos trouvées`;
 }
 async function refresh(){
- statusEl.textContent="Actualisation des équipages…";
+ statusEl.textContent="Actualisation des équipages en arrière-plan…";
  try{
    const d=await getJSON(LIVE,3500),a=norm(d);
    if(a.length){render(a);statusEl.textContent="Données actualisées";return}
@@ -151,6 +106,8 @@ async function refresh(){
  statusEl.textContent="Données disponibles • mode de secours";
 }
 document.querySelector("#refresh").onclick=refresh;
-render(norm(SNAPSHOT));
-refresh();
+// Affichage immédiat : les cartes apparaissent sans attendre l'API live.
+const initial=norm(SNAPSHOT);
+render(initial);
+statusEl.textContent="Affichage instantané · actualisation disponible";
 </script></body></html>
